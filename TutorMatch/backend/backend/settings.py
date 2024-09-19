@@ -45,7 +45,6 @@ INSTALLED_APPS = [
     'corsheaders',
     'rest_framework.authtoken',
     'rest_framework_simplejwt',
-    'channels',
 ]
 
 MIDDLEWARE = [
@@ -169,11 +168,3 @@ MEDIA_ROOT = BASE_DIR / 'media'
 ASGI_APPLICATION = 'backend.asgi.application'
 
 
-CHANNEL_LAYERS = {
-    'default': {
-        'BACKEND': 'channels_redis.core.RedisChannelLayer',
-        'CONFIG': {
-            "hosts": [('127.0.0.1', 6379)],
-        },
-    },
-}
