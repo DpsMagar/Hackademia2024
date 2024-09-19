@@ -52,7 +52,6 @@ Desktop.ini
 *.pyi
 *.bfbs
 
-_init_*
 *.csv*
 *.jpg*
 *.png*

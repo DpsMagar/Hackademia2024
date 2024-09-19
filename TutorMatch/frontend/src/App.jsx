@@ -1,19 +1,20 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Layout from './Components/Layout';
 
 function App() {
-  const [message, setMessage] = useState('');
-
-  useEffect(() => {
-    fetch('http://localhost:8000/api/hello/')
-      .then(response => response.json())
-      .then(data => setMessage(data.message));
-  }, []);
-
-  return (
-    <div className="text-center">
-      <h1 className="text-2xl">{message} I am Dipesh</h1>
-    </div>
-  );
+    return (
+        <Router>
+            <Routes>
+                <Route path="/" element={<HomePage />} />
+                {/* <Route path="/login" element={<Layout><Login/></Layout>} />
+                <Route path="/register" element={<Layout><Register/></Layout>} />
+                <Route path="/logout" element={<Logout />} />
+                <Route path="/about" element={<Layout><About/></Layout>}/>
+                <Route path="/home" element={<Layout><MainPage/></Layout>}/> */}
+            </Routes>
+        </Router>
+    );
 }
 
 export default App;
