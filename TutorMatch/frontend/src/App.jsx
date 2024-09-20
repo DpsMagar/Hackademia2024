@@ -5,7 +5,8 @@ import TutorHomepage from "./pages/tutor/homepage"
 import YourChoice from "./pages/user/YourChoice"
 import Courses from "./pages/tutor/Courses"
 import AddCourse from "./pages/tutor/AddCourse"
-import Register from "./components/Register"
+import Register from "./Forms/Register"
+import Login from "./Forms/Login"
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
         {/* user  */}
         <Route path="/" element={<UserHomepage />} />
         <Route path="/register" element={<Register />} />
+        <Route path="/login" element={<Login />} />
         <Route path="/choose-you-like" element={<YourChoice />} />
       </Routes>
     </Router>

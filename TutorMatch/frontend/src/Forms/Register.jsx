@@ -2,8 +2,7 @@ import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import * as yup from "yup";
 import { yupResolver } from "@hookform/resolvers/yup";
-import axiosInstance from "./AxiosInstance"; // Assume this is set up for axios
-
+import axiosInstance from "../components/AxiosInstance";
 const Register = () => {
   const [success, setSuccess] = useState(false);
 

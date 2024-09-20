@@ -2,6 +2,8 @@
 from rest_framework import serializers
 from django.contrib.auth import get_user_model
 from .models import User, Tutor, Student
+from rest_framework_simplejwt.serializers import TokenObtainPairSerializer
+
 
 User = get_user_model()
 
@@ -65,3 +67,10 @@ class StudentSerializer(serializers.ModelSerializer):
         user = UserSerializer.create(UserSerializer(), validated_data=user_data)
         student = Student.objects.create(user=user, **validated_data)
         return student
+    
+class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):
+    @classmethod
+    def get_token(cls, user):
+        token = super().get_token(user)
+        # Add custom claims if needed
+        return token
