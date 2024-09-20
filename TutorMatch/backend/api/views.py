@@ -1,42 +1,54 @@
-from rest_framework import generics, status
-from django.contrib.auth.models import User
+# views.py
+from rest_framework import generics
 from rest_framework.permissions import AllowAny, IsAuthenticated
-from django.contrib.auth import authenticate
-from rest_framework.views import APIView
-from .serializers import (
-    RegisterSerializer, UserSerializer, 
-)
+from .models import Tutor, Student
+from .serializers import UserSerializer, TutorSerializer, StudentSerializer
 from rest_framework.response import Response
-from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
+from rest_framework import status
+from rest_framework.views import APIView
 from rest_framework_simplejwt.tokens import RefreshToken
+from django.contrib.auth import authenticate
 
-from django.shortcuts import get_object_or_404
-
-# User registration view
-class userRegisterView(generics.CreateAPIView):
-    queryset = User.objects.all()
-    serializer_class = RegisterSerializer
-    permission_classes = (AllowAny,)
-
-# User login view
-class LoginView(TokenObtainPairView):
+class UserRegisterView(generics.CreateAPIView):
+    serializer_class = UserSerializer
     permission_classes = [AllowAny]
 
-# User logout view
-class LogoutView(APIView):
+class TutorRegisterView(generics.CreateAPIView):
+    serializer_class = TutorSerializer
+    permission_classes = [AllowAny]
+
+class StudentRegisterView(generics.CreateAPIView):
+    serializer_class = StudentSerializer
+    permission_classes = [AllowAny]
+
+class UserProfileView(generics.RetrieveAPIView):
     permission_classes = [IsAuthenticated]
 
+    def get(self, request, *args, **kwargs):
+        user = request.user
+        if user.role == 'tutor':
+            tutor = Tutor.objects.get(user=user)
+            serializer = TutorSerializer(tutor)
+        elif user.role == 'student':
+            student = Student.objects.get(user=user)
+            serializer = StudentSerializer(student)
+        else:
+            return Response({'error': 'Invalid user role'}, status=400)
+        return Response(serializer.data)
+
+class LoginView(APIView):
+    permission_classes = [AllowAny]
+
     def post(self, request):
-        try:
-            refresh_token = request.data.get('refresh_token')
-            token = RefreshToken(refresh_token)
-            token.blacklist()
-            return Response(status=status.HTTP_205_RESET_CONTENT)
-        except Exception as e:
-            return Response(status=status.HTTP_400_BAD_REQUEST)
-    
-#User detail view
-class UserListView(generics.ListAPIView):
-    queryset = User.objects.all()
-    serializer_class = UserSerializer
-    
+        username = request.data.get('username')
+        password = request.data.get('password')
+
+        user = authenticate(username=username, password=password)
+        if user is not None:
+            refresh = RefreshToken.for_user(user)
+            return Response({
+                'refresh': str(refresh),
+                'access': str(refresh.access_token),
+                'role': user.role  # Send the user's role
+            })
+        return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)

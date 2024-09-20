@@ -1,0 +1,36 @@
+[
+    {
+      "model": "auth.permission",
+      "pk": 1,
+      "fields": {
+        "name": "Can view tutor",
+        "content_type": 1,  
+        "codename": "view_tutor"
+      }
+    },
+    {
+      "model": "auth.permission",
+      "pk": 2,
+      "fields": {
+        "name": "Can add tutor",
+        "content_type": 1,  
+        "codename": "add_tutor"
+      }
+    },
+    {
+      "model": "api.user",
+      "pk": 1,
+      "fields": {
+        "username": "tutor_example",
+        "email": "tutor@example.com",
+        "password": "pbkdf2_sha256$870000$lnw6ijtqub0rdstKlqWlnJ$Mu/oGwEzM935tR3B2RjEDyekpFyiuAfFnf9oK8k382c=",
+        "role": "tutor",
+        "is_superuser": false,
+        "is_staff": true,
+        "is_active": true,
+        "user_permissions": [1, 2] 
+    }
+}
+]
+  
+  
