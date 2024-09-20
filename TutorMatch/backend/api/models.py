@@ -8,15 +8,14 @@ class User(AbstractUser):
     )
     role = models.CharField(max_length=10, choices=ROLE_CHOICES)
 
-    # Override related_name for groups and user_permissions to avoid conflicts
     groups = models.ManyToManyField(
         'auth.Group',
-        related_name='custom_user_set',  # Custom related name to avoid conflict
+        related_name='custom_user_set',  
         blank=True,
     )
     user_permissions = models.ManyToManyField(
         'auth.Permission',
-        related_name='custom_user_permissions_set',  # Custom related name to avoid conflict
+        related_name='custom_user_permissions_set',  
         blank=True,
     )
 

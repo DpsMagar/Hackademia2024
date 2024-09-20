@@ -1,6 +1,9 @@
 # serializers.py
 from rest_framework import serializers
+from django.contrib.auth import get_user_model
 from .models import User, Tutor, Student
+
+User = get_user_model()
 
 class UserSerializer(serializers.ModelSerializer):
     class Meta:
@@ -19,15 +22,34 @@ class UserSerializer(serializers.ModelSerializer):
         return user
 
 class TutorSerializer(serializers.ModelSerializer):
-    user = UserSerializer()
+    # Fields related to the user
+    username = serializers.CharField(write_only=True)
+    password = serializers.CharField(write_only=True)
+    role = serializers.ChoiceField(choices=User.ROLE_CHOICES, default='tutor')
+    
+    # Fields related to the Tutor
+    address = serializers.CharField()
+    contact = serializers.CharField()
+    age = serializers.IntegerField()
+    document = serializers.FileField()
+    cover_letter = serializers.CharField()
 
     class Meta:
         model = Tutor
-        fields = '__all__'
+        fields = ['username', 'password', 'role', 'address', 'contact', 'age', 'document', 'cover_letter']
 
     def create(self, validated_data):
-        user_data = validated_data.pop('user')
-        user = UserSerializer.create(UserSerializer(), validated_data=user_data)
+        # Extract user-related data
+        username = validated_data.pop('username')
+        password = validated_data.pop('password')
+        role = validated_data.pop('role')
+
+        # Create the user
+        user = User.objects.create(username=username, role=role)
+        user.set_password(password)
+        user.save()
+
+        # Create the Tutor profile
         tutor = Tutor.objects.create(user=user, **validated_data)
         return tutor
 
