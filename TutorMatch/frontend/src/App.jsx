@@ -17,7 +17,7 @@ function App() {
       <Routes>
         {/* tutor  */}
         <Route path="/tutor/dashboard" element={<TutorHomepage />} />
-        <Route path="/user/dashboard" element={<TutorHomepage />} />
+        <Route path="/user/dashboard" element={<UserHomepage />} />
         <Route path="/tutor/courses" element={<Courses />} />
         <Route path="/tutor/add-course" element={<AddCourse />} />
 

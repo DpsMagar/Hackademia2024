@@ -33,6 +33,8 @@ const Login = () => {
         username: data.username,
         password: data.password,
       });
+      console.log(response );
+      
 
       // Handle success, for example, storing token in localStorage
       localStorage.setItem("access_token", response.data.access);
