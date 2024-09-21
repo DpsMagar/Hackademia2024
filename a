@@ -57,33 +57,24 @@ class TutorSerializer(serializers.ModelSerializer):
         return tutor
 
 class StudentSerializer(serializers.ModelSerializer):
-    username = serializers.CharField(write_only=True)
-    password = serializers.CharField(write_only=True)
-    role = serializers.ChoiceField(choices=User.ROLE_CHOICES, default='student')
 
     class Meta:
         model = Student
-        fields = ['username', 'password', 'role']
+        fields = '__all__'
 
     def create(self, validated_data):
+        # Extract user-related data
         username = validated_data.pop('username')
         password = validated_data.pop('password')
         role = validated_data.pop('role')
 
-        # Check for existing user
-        if User.objects.filter(username=username).exists():
-            raise serializers.ValidationError({"username": "This username is already taken."})
-
         # Create the user
-        try:
-            user = User(username=username, role=role)
-            user.set_password(password)
-            user.save()
-        except Exception as e:
-            raise serializers.ValidationError({"error": str(e)})
+        user = User.objects.create(username=username, role=role)
+        user.set_password(password)
+        user.save()
 
-        # Create the Student profile
-        student = Student.objects.create(user=user)
+        # Create the Tutor profile
+        student = Student.objects.create(user=user, **validated_data)
         return student
     
 class CustomTokenObtainPairSerializer(TokenObtainPairSerializer):

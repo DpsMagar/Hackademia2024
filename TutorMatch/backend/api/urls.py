@@ -1,4 +1,3 @@
-# urls.py
 from django.urls import path
 from .views import UserRegisterView, TutorRegisterView, StudentRegisterView, UserProfileView, CustomTokenObtainPairView
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
