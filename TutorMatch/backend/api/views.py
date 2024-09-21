@@ -53,26 +53,7 @@ class UserProfileView(generics.RetrieveAPIView):
             serializer = StudentSerializer(student)
         else:
             return Response({'error': 'Invalid user role'}, status=400)
-        return Response(serializer.data)
-
-# class LoginView(APIView):
-#     permission_classes = [AllowAny]
-
-#     def post(self, request):
-#         username = request.data.get('username')
-#         password = request.data.get('password')
-
-#         user = authenticate(username=username, password=password)
-#         if user is not None:
-#             refresh = RefreshToken.for_user(user)
-#             return Response({
-#                 'refresh': str(refresh),
-#                 'access': str(refresh.access_token),
-#                 'role': user.role  # Send the user's role
-#             })
-#         return Response({'error': 'Invalid credentials'}, status=status.HTTP_401_UNAUTHORIZED)
-    
-
+        return Response(serializer.data)  
 
 class CustomTokenObtainPairView(TokenObtainPairView):
     serializer_class = CustomTokenObtainPairSerializer
